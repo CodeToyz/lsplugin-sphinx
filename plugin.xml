@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+    <name>
+        <lang name="default">ESS Plugin</lang>
+    </name>
+    <author>
+        <lang name="default">CodeToyz Team</lang>
+    </author>
+    <homepage>http://codetoyz.ru</homepage>
+    <version>0.0.1</version>
+    <requires>
+        <livestreet>0.5.1</livestreet>
+        <plugins>
+        </plugins>
+    </requires>
+    <description>
+        <lang name="default">Extended Sphinx Search</lang>
+        <lang name="russian">Расширенный функционал поиска при помощи Sphinx</lang>
+    </description>
+</plugin>
