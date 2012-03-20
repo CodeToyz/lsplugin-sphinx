@@ -3,7 +3,7 @@
 class PluginSphinx_ActionSearch extends ActionPlugin
 {	
 	
-	private $sTypesEnabled = array('topics' => array('topic_publish' => 1), 'comments' => array('comment_delete' => 0),'users' => array('user_activate' => 1));
+	private $sTypesEnabled = array('topics' => array('topic_publish' => 1), 'comments' => array('comment_delete' => 0),'users' => array('user_activate' => 1),'blogs' => array());
 	private $aSphinxRes = null;
 	private $bIsResults = FALSE;
 	
@@ -20,6 +20,7 @@ class PluginSphinx_ActionSearch extends ActionPlugin
 		$this->AddEvent('comments','EventComments');
 		$this->AddEvent('opensearch','EventOpenSearch');
 		$this->AddEvent('users', 'EventUsers');
+		$this->AddEvent('blogs', 'EventBlogs');
 	}
 	
 	function EventIndex(){
@@ -149,6 +150,33 @@ class PluginSphinx_ActionSearch extends ActionPlugin
 			$this->Viewer_Assign('bIsResults', TRUE);
 			$this->Viewer_Assign('aRes', $aRes);
 			$this->Viewer_Assign('aUsers', $aUsers);
+		}
+	
+	}
+	
+	function EventBlogs(){
+	
+		/**
+		 * Ищем
+		 */
+		$aReq = $this->PrepareRequest();
+		$aRes = $this->PrepareResults($aReq, Config::Get('module.topic.per_page'));
+		if(FALSE === $aRes) {
+			$this->Message_AddErrorSingle($this->Lang_Get('system_error'));
+			return Router::Action('error');
+		}
+		/**
+		 * Если поиск дал результаты
+		 */
+		if($this->bIsResults){
+			/**
+			 * Получаем топик-объекты по списку идентификаторов
+			 */
+			$aBlogs = $this->Blog_GetBlogsAdditionalData(array_keys($this->aSphinxRes['matches']));			
+			
+			$this->Viewer_Assign('bIsResults', TRUE);
+			$this->Viewer_Assign('aRes', $aRes);
+			$this->Viewer_Assign('aBlogs', $aBlogs);
 		}
 	
 	}

@@ -1,5 +1,5 @@
 {include file='header.tpl'}
-
+{debug}
 
 
 <h2>{$aLang.search_results}: {$aReq.q|escape:'html'}</h2>
@@ -9,26 +9,16 @@
 	<li {if $aReq.sType == $sType}class="active"{/if}>					
 		<a href="{router page='search'}{$sType}/?q={$aReq.q|escape:'html'}">
 			{$iCount}
-			{if $sType=="topics"}
-				{$iCount|declension:$aLang.ess_search_results_count_topics:'russian'} 
-			{elseif $sType=="comments"}
-				{$iCount|declension:$aLang.ess_search_results_count_comments:'russian'} 
-			{elseif $sType=="users"}
-				{$iCount|declension:$aLang.ess_search_results_count_users:'russian'} 
-			{/if}
+			{assign var="sLangKeyType" value="ess_search_results_count_$sType"}
+			{$iCount|declension:$aLang[$sLangKeyType]:'russian'} 
+			
 		</a>
 	</li>				
 {/foreach}
 </ul>
 
 {if $bIsResults}
-	{if $aReq.sType == 'topics'}
-		{include file='topic_list.tpl'}
-	{elseif $aReq.sType == 'comments'}
-		{include file='comment_list.tpl'}
-	{elseif $aReq.sType == 'users'}
-		{include file='sphinx/templates/skin/default/actions/ActionSearch/user.tpl'}
-	{/if}
+	{include file="sphinx/templates/skin/default/actions/ActionSearch/{$aReq.sType}.tpl"}
 {else}
 	{$aLang.search_results_empty}
 {/if}
